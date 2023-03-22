@@ -1,24 +1,27 @@
-
-import DopApp from "./DopApp";
-import React, {Component, useRef, useState } from 'react';
+import React, {Component, useRef, useState, createRef, createContext} from 'react';
 import { Link, useNavigate } from "react-router-dom";
 import './App.css';
 import girl from './images/girl.png';
 import man from './images/man.png';
 import logo from './images/logo.png';
 import Input from './Input';
-import {
+import { 
   BrowserRouter as Router,
   Route,
   Routes
 } from 'react-router-dom';
+import DopApp from "./DopApp";
 
 
 
 function Landing() {
-  const [avatar, setAvatar] = useState()
+  const [username, setUsername] = useState(null);
+  const [avatar, setAvatar] = useState("👧");
+  const [error, setError] = useState("");
+  const UserContext = createContext();
   const nameRef = useRef()
-  /*let navigate = useNavigate(); 
+  const navigate = useNavigate();
+  /* 
   function Redirect() {
     let navigate = useNavigate();
     function handleClick() {
@@ -31,16 +34,18 @@ function Landing() {
         <img src={man} alt="" />
       </div>
   }*/
+  
   const randomName = (e) => {
+
     e.preventDefault();
     
   }
-  const randomAvartar = () => {
-    
-    alert('Izabrali ste svog avatara')
+  const randomAvartar = (e) => {
 
-  }
+    e.preventDefault();
     
+  }
+  
     
       return (
         <div className="App">
@@ -49,15 +54,15 @@ function Landing() {
         <div className='Name-form'>
             <form onSubmit={randomName}>
                 <input ref={nameRef} type="text" placeholder='Upišite  Nickname...'/>
-                <button type="submit">
+                <button type="submit" onClick={() => navigate("/DopApp")}>
                   Pridruži se
                 </button>
             </form>
         </div>
-        <div className='Avatar-pic'>
-        <img src={girl} onClick={randomAvartar} />
-        <img src={man} onClick={randomAvartar} />
-      </div>
+        <ul className='Avatar-pic'>
+        <li><img src={girl} onClick={randomAvartar} /></li>
+        <li><img src={man} onClick={randomAvartar} /></li>
+      </ul>
       </div>
       )
 }

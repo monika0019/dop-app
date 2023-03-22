@@ -1,7 +1,8 @@
 import React, {Component, useRef, useState } from 'react';
 import { Link, useNavigate } from "react-router-dom";
 import './App.css';
-import Landing from './Landing';
+import Login from './Landing';
+import Messages from './Messages';
 import user from './images/user.png';
 import girl from './images/girl.png';
 import man from './images/man.png';
@@ -20,7 +21,9 @@ function App() {
     <Router>
     
       <Routes>
-          <Route path="/" element={<Landing />} />
+          <Route path="/" element={<Login />} />
+          <Route path="/poruke" element={<Input />} />
+          <Route path="/poruke" element={<Messages />} />
         </Routes>
     </Router>
   )

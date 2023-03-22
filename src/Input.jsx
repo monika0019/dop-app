@@ -4,11 +4,11 @@ import React from "react";
 function Input (props) {
   const [state, setState] = useState({text: ""})
 
-  function onChange(e) {
+  function Promjena(e) {
     setState({text: e.target.value});
   }
 
-   const onSubmit =(e) => {
+   const Potvrda =(e) => {
     setState(e.target.value)
     props.onSendMessage(state.text);
   }
@@ -16,10 +16,10 @@ function Input (props) {
 
     return (
       <div className="Input-mess">
-        <form onSubmit={e => onSubmit(e)}>
+        <form onSubmit={e => Potvrda(e)}>
           <input
             value={state}
-            onChange={e => onChange(e)}
+            onChange={e => Promjena(e)}
             type="text"
             placeholder="Enter your message and press ENTER"
             autofocus="true"

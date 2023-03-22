@@ -7,7 +7,7 @@ function Messages () {
     
     return (
       <ul className="Messages-list">
-        {messages.map(m => renderMessage(m))}
+        {messages.map(m => setMessages(m))}
         
       </ul>
     );
