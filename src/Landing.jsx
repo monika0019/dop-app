@@ -18,53 +18,55 @@ function Landing() {
   const [username, setUsername] = useState(null);
   const [avatar, setAvatar] = useState("👧");
   const [error, setError] = useState("");
-  const UserContext = createContext();
-  const nameRef = useRef()
+  const nameRef = useRef();
   const navigate = useNavigate();
-  /* 
-  function Redirect() {
-    let navigate = useNavigate();
-    function handleClick() {
-      navigate('/input')
-    }*/
-  
-  /*const randomAvartar= () => {
-      <div>
-        <img src={girl} alt="" />
-        <img src={man} alt="" />
+
+  const handleNameChange = (e) => {
+    e.preventDefault();
+    setUsername(e.target.value);
+  };
+
+  const selectRandomAvatar = (e) => {
+    e.preventDefault();
+    // TODO: Implement the logic for selecting a random avatar
+  };
+
+  const joinChat = (e) => {
+    e.preventDefault();
+    if (username) {
+      navigate("/DopApp");
+    } else {
+      setError("Please enter a username");
+    }
+  };
+
+  return (
+    <div className="App">
+      <h1 className="App-title">
+        DopApp <img className="App-logo" src={logo} alt="" />
+      </h1>
+      <div className="Name-form">
+        <form onSubmit={joinChat}>
+          <input
+            ref={nameRef}
+            type="text"
+            placeholder="Upiši svoj nadimak..."
+            onChange={handleNameChange}
+          />
+          <button type="submit">Pridruži se</button>
+        </form>
+        {error && <div className="error">{error}</div>}
       </div>
-  }*/
-  
-  const randomName = (e) => {
-
-    e.preventDefault();
-    
-  }
-  const randomAvartar = (e) => {
-
-    e.preventDefault();
-    
-  }
-  
-    
-      return (
-        <div className="App">
-          <h1 className='App-title'>DopApp <img className='App-logo' src={logo} alt="" />
-          </h1>
-        <div className='Name-form'>
-            <form onSubmit={randomName}>
-                <input ref={nameRef} type="text" placeholder='Upišite  Nickname...'/>
-                <button type="submit" onClick={() => navigate("/DopApp")}>
-                  Pridruži se
-                </button>
-            </form>
-        </div>
-        <ul className='Avatar-pic'>
-        <li><img src={girl} onClick={randomAvartar} /></li>
-        <li><img src={man} onClick={randomAvartar} /></li>
+      <ul className="Avatar-pic">
+        <li>
+          <img src={girl} alt="Girl Avatar" onClick={selectRandomAvatar} />
+        </li>
+        <li>
+          <img src={man} alt="Man Avatar" onClick={selectRandomAvatar} />
+        </li>
       </ul>
-      </div>
-      )
+    </div>
+  );
 }
 
 export default Landing;

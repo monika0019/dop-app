@@ -1,33 +1,32 @@
-import { useState} from "react";
-import React from "react";
+import React, { useState } from "react";
 
-function Input (props) {
-  const [state, setState] = useState({text: ""})
+function Input(props) {
+  const [text, setText] = useState("");
 
-  function Promjena(e) {
-    setState({text: e.target.value});
+  function onChange(e) {
+    setText(e.target.value);
   }
 
-   const Potvrda =(e) => {
-    setState(e.target.value)
-    props.onSendMessage(state.text);
+  function onSubmit(e) {
+    e.preventDefault();
+    setText("");
+    props.onSendMessage(text);
   }
 
-
-    return (
-      <div className="Input-mess">
-        <form onSubmit={e => Potvrda(e)}>
-          <input
-            value={state}
-            onChange={e => Promjena(e)}
-            type="text"
-            placeholder="Enter your message and press ENTER"
-            autofocus="true"
-          />
-          <button>Send</button>
-        </form>
-      </div>
-    );
-  }
+  return (
+    <div className="Input">
+      <form onSubmit={onSubmit}>
+        <input
+          onChange={onChange}
+          value={text}
+          type="text"
+          placeholder="Upiši svoju poruku i pritisni ENTER"
+          autoFocus={true}
+        />
+        <button>Pošalji</button>
+      </form>
+    </div>
+  );
+}
 
 export default Input;

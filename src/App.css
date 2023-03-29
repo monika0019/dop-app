@@ -118,10 +118,18 @@ form {
   flex-grow: 1;
 }
 
+input {
+  padding: 5px;
+  font-size: 16px;
+  border-radius: 8px;
+  border: 1px solid lightblue;
+  flex-grow: 1;
+}
+
 button {
   padding: 5px 10px;
   font-size: 16px;
-  background-color: thistle;
+  background-color: lightskyblue;
   color: white;
   border: none;
   border-radius: 8px;
