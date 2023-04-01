@@ -4,8 +4,9 @@ import Messages from "./Messages";
 import Input from "./Input";
 import { setUsername } from "./Landing";
 import Landing from "./Landing";
+import { useLocation, useParams, withRouter } from 'react-router-dom';
 
-function randomName() {
+export function randomName() {
   const adjectives = [
     "autumn",
     "hidden",
@@ -143,7 +144,7 @@ function randomName() {
   return adjective + noun;
 }
 
-function randomColor() {
+export function randomColor() {
   return "#" + Math.floor(Math.random() * 0xffffff).toString(16);
 }
 
@@ -155,60 +156,23 @@ function randomColor() {
   );
   };*/
 
-function DopApp() {
-  const [messages, setMessages] = useState([]);
-  const [currentMember, setCurrentMember] = useState({
-    username: randomName(),
-    avatar: randomColor(),
-    id: "",
-  });
+  const DopApp = (props) => {
+    console.log('DopApp rendering')
+    const { messages, currentMember, onSendMessage } = props;
+    const location = useLocation();
+    const { randomID } = useParams();
+  const params = new URLSearchParams(location.search);
 
-  const drone = new window.Scaledrone("OKoLR1ZgZTNHMeUZ", {
-    data: currentMember,
-  });
-
-  
-  useEffect(() => {
-    drone.on("open", (error) => {
-      if (error) {
-        return console.log(error);
-      }
-
-      console.log("openning connection");
-      console.log("drone", drone);
-      const member = { ...currentMember };
-      member.id = drone.clientId;
-      setCurrentMember(member);
-    });
-    const room = drone.subscribe("observable-room");
-    room.on("data", (messages, member) => {
-      const newMessage = messages;
-      setMessages((prevMessages) => [...prevMessages, newMessage]);
-    });
-    drone.on("error", (error) => {
-      console.error("Error with connection:", error);
-    });
-    drone.on("close", (event) => {
-      console.log("Connection closed:", event);
-    });
-  });
-
-  const onSendMessage = (message) => {
-    drone.publish({
-      room: "observable-room",
-      message,
-    });
-  };
-  
+  const nickname = params.get('nickname') || 'anonymous';
   return (
     <div className="App">
       <div className="App-header">
         <h1>DopApp</h1>
       </div>
-      <Messages messages={messages} currentMember={currentMember} />
+      <Messages messages={messages} currentMember={nickname} />
       <Input onSendMessage={onSendMessage} />
     </div>
   );
 }
 
-export default DopApp;
+export {DopApp};

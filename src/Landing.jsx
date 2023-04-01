@@ -1,5 +1,5 @@
 import React, {Component, useRef, useState, createRef, createContext} from 'react';
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation, useHistory } from "react-router-dom";
 import './App.css';
 import girl from './images/girl.png';
 import man from './images/man.png';
@@ -14,30 +14,51 @@ import DopApp from "./DopApp";
 
 
 
-function Landing() {
-  const [username, setUsername] = useState(null);
+const Landing = (props) => {
+  console.log('landing rendering')
+  const [nickname, setNickname] = useState('');
   const [avatar, setAvatar] = useState("👧");
   const [error, setError] = useState("");
   const nameRef = useRef();
+  const randomId = Math.floor(Math.random() * 90000) + 10000;
+  const [currentMember, setCurrentMember] = useState()
   const navigate = useNavigate();
 
-  const handleNameChange = (e) => {
+  const handleNicknameChange = (event) => {
+    setNickname(event.target.value);
+  }
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+
+  }
+  const handleJoinChat = (e) => {
     e.preventDefault();
-    setUsername(e.target.value);
+  if (nickname) {
+    setCurrentMember({ nickname, avatar, randomId });
+    navigate("/DopApp");
+  } else {
+    setError("Upišite svoj nadimak!");
+  }
   };
 
   const selectRandomAvatar = (e) => {
     e.preventDefault();
+    if (nameRef.current.value) {
+      setNickname(nameRef.current.value);
+    }
     // TODO: Implement the logic for selecting a random avatar
   };
 
   const joinChat = (e) => {
     e.preventDefault();
-    if (username) {
-      navigate("/DopApp");
-    } else {
-      setError("Please enter a username");
-    }
+  if (nickname) {
+    navigate("/DopApp", { state: { nickname } });
+  } else {
+    setError("Upišite svoj nadimak!");
+  }
+
+
   };
 
   return (
@@ -46,14 +67,14 @@ function Landing() {
         DopApp <img className="App-logo" src={logo} alt="" />
       </h1>
       <div className="Name-form">
-        <form onSubmit={joinChat}>
-          <input
-            ref={nameRef}
-            type="text"
-            placeholder="Upiši svoj nadimak..."
-            onChange={handleNameChange}
-          />
-          <button type="submit">Pridruži se</button>
+        <form onSubmit={handleSubmit}>
+        <input
+        type="text"
+        value={nickname}
+        onChange={handleNicknameChange}
+        placeholder="Enter your username"
+      />
+          <button onClick={joinChat} type="submit">Pridruži se</button>
         </form>
         {error && <div className="error">{error}</div>}
       </div>

@@ -81,7 +81,7 @@
   margin: 0 10px -10px;
 }
 
-.Message-content  .username {
+.Message-content  .nickname {
   display: block;
   color: turquoise;
   font-size: 14px;
@@ -93,7 +93,7 @@
   max-width: 400px;
   margin: 0;
   border-radius: 12px;
-  background-color: peru;
+  background-color: midnightblue;
   color: white;
   display: inline-block;
 }

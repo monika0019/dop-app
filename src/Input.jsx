@@ -1,13 +1,14 @@
 import React, { useState } from "react";
 
-function Input(props) {
+const Input = (props) => {
+  console.log('input rendering')
   const [text, setText] = useState("");
 
-  function onChange(e) {
+  const onChange = (e) => {
     setText(e.target.value);
   }
 
-  function onSubmit(e) {
+  const onSubmit = (e) => {
     e.preventDefault();
     setText("");
     props.onSendMessage(text);
