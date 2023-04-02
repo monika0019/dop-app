@@ -72,15 +72,6 @@
 .currentMember  .Message-content .text {
   text-align: right;
 }
-
-.Messages-message  .avatar {
-  height: 35px;
-  width: 35px;
-  border-radius: 50%;
-  display: inline-block;
-  margin: 0 10px -10px;
-}
-
 .Message-content  .username {
   display: block;
   color: turquoise;
@@ -100,6 +91,13 @@
 
 .currentMember  .Message-content .text {
   background-color: mediumaquamarine;
+}
+.Messages-message  .avatar {
+  height: 35px;
+  width: 35px;
+  border-radius: 50%;
+  display: inline-block;
+  margin: 0 10px -10px;
 }
 
 form {

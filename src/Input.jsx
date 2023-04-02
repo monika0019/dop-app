@@ -17,7 +17,7 @@ const Input = (props) => {
   return (
     <div className="Input">
       <form onSubmit={onSubmit}>
-        <input
+        <input className="Input-mess"
           onChange={onChange}
           value={text}
           type="text"

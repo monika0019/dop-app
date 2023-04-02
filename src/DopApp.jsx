@@ -13,10 +13,9 @@ export function randomColor() {
 
 
 const DopApp = (props) => {
-  console.log("Passing nickname from APP to DoAPp " + props.nickname)
+  console.log("Passing nickname from APP to DoApp " + props.nickname)
   console.log('DopApp rendering')
-  const { messages, currentMember, onSendMessage } = props;
-  const location = useLocation();
+  const { messages, onSendMessage } = props;
 
   const nickname = Landing.nickname || 'anonymous';
   return (

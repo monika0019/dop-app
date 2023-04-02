@@ -82,15 +82,15 @@ const Landing = (props) => {
         </form>
         {error && <div className="error">{error}</div>}
       </div>
-      {/*<ul className="Avatar-pic">
+      <ul className="Avatar-pic">
         <li>
           <img src={girl} alt="Girl Avatar" onClick={selectRandomAvatar} />
         </li>
         <li>
           <img src={man} alt="Man Avatar" onClick={selectRandomAvatar} />
         </li>
-      </ul>*/}
-  </div>
+      </ul>
+    </div>
   );
 }
 

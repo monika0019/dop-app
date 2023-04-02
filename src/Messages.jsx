@@ -6,7 +6,7 @@ const Messages = (props) => {
 
   const renderMessage = (message, k) => {
     const { member, text } = message;
-    const messageFromMe = member.id === currentMember.id;
+    const messageFromMe = member.username === currentMember;
     const className = messageFromMe
       ? "Messages-message currentMember"
       : "Messages-message";
