@@ -15,7 +15,7 @@
   display: flex;
   width: 100%;
   max-width: 300px;
-  margin: 0 auto;
+  margin:  auto;
   border-radius: 8px;
   
 }
@@ -60,17 +60,17 @@
 }
 
 .Messages-message.currentMember {
-  /*justify-content: flex-end;*/
   flex-direction: row-reverse;
   text-align: right;
 }
 
-.Message-content {
+.Message-content .text{
   display: inline-block;
+  text-align: left;
 }
 
-.currentMember  .Message-content {
-  align-items: flex-end;
+.currentMember  .Message-content .text {
+  text-align: right;
 }
 
 .Messages-message  .avatar {
@@ -81,7 +81,7 @@
   margin: 0 10px -10px;
 }
 
-.Message-content  .nickname {
+.Message-content  .username {
   display: block;
   color: turquoise;
   font-size: 14px;
