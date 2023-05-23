@@ -3,10 +3,11 @@ import React from "react";
 const Messages = (props) => {
   console.log('mess rendering')
   const { messages, currentMember } = props;
+  const currentTabId = localStorage.getItem("tabId");
 
   const renderMessage = (message, k) => {
-    const { member, text } = message;
-    const messageFromMe = member.username === currentMember;
+    const { member, text, senderTabId } = message;
+    const messageFromMe = member.username === currentMember && senderTabId === currentTabId;
     const className = messageFromMe
       ? "Messages-message currentMember"
       : "Messages-message";

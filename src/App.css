@@ -4,6 +4,7 @@
   justify-content: space-between;
   height: 100vh;
 }
+
 .App-title {
   display: flex;
   margin-top: 50px;
@@ -11,14 +12,15 @@
   margin-left: auto;
   color: midnightblue;
 }
+
 .Name-form {
   display: flex;
   width: 100%;
   max-width: 300px;
-  margin:  auto;
+  margin: auto;
   border-radius: 8px;
-  
 }
+
 .App-logo {
   border-radius: 80%;
   display: flex;
@@ -27,6 +29,7 @@
   margin-top: 5px;
   width: 40%;
 }
+
 .Avatar-pic {
   display: flex;
   margin: auto auto;
@@ -34,6 +37,7 @@
   height: 300px;
   width: 300px;
 }
+
 .App-header {
   background-color: midnightblue;
   overflow: visible;
@@ -42,9 +46,8 @@
   color: powderblue;
 }
 
-
 .Messages-list {
-  padding: 20px 0; 
+  padding: 20px 0;
   max-width: 900px;
   width: 100%;
   margin: 0 auto;
@@ -57,29 +60,44 @@
 .Messages-message {
   display: flex;
   margin-top: 10px;
+  align-items: center;
 }
 
-.Messages-message.currentMember {
+.Messages-message-received {
+  flex-direction: row;
+  text-align: left;
+}
+
+.Messages-message-sent {
   flex-direction: row-reverse;
   text-align: right;
 }
 
-.Message-content .text{
-  display: inline-block;
-  text-align: left;
-}
-
-.currentMember  .Message-content .text {
+.Messages-message .currentMember {
+  flex-direction: row-reverse;
   text-align: right;
 }
-.Message-content  .username {
+
+.Message-content .text {
+  display: inline-block;
+}
+
+.Message-content {
+  display: inline-block;
+}
+
+.currentMember > .Message-content {
+  align-items: flex-end;
+}
+
+.Message-content .username {
   display: block;
   color: turquoise;
   font-size: 14px;
   padding-bottom: 4px;
 }
 
-.Message-content  .text {
+.Message-content .text {
   padding: 10px;
   max-width: 400px;
   margin: 0;
@@ -89,10 +107,11 @@
   display: inline-block;
 }
 
-.currentMember  .Message-content .text {
+.currentMember .Message-content .text {
   background-color: mediumaquamarine;
 }
-.Messages-message  .avatar {
+
+.Messages-message .avatar {
   height: 35px;
   width: 35px;
   border-radius: 50%;

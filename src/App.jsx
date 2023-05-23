@@ -1,34 +1,34 @@
 import React, {useContext, useRef, useState, useEffect } from 'react';
-import { Link, useNavigate, useLocation } from "react-router-dom";
-//import "./App.css";
-import user from './images/user.png';
-import girl from './images/girl.png';
-import man from './images/man.png';
-import woman from './images/woman.png';
-import logo from './images/logo.png';
-import {
-  BrowserRouter as Router,
+import { BrowserRouter as Router,
   Route,
-  Routes
-} from 'react-router-dom';
+  Routes ,Link, useNavigate, useLocation } from "react-router-dom";
+  import ReactDOM from 'react-dom';
+import "./App.css";
 import Landing from './Landing';
-import { randomName, randomColor, DopApp } from './DopApp';
+import { randomColor, DopApp } from './DopApp';
 
 
 const App = () => {
   console.log('App rendering')
   const [messages, setMessages] = useState([]);
 const [nickname, setNickname] = useState("");
-const randomId = Math.floor(Math.random() * 9) + 10;
+function generateTabId() {
+  const tabId = localStorage.getItem('tabId');
+  if (tabId) {
+    return tabId;
+  } else {
+    const newTabId = Math.random().toString(36).substr(2, 9);
+    localStorage.setItem('tabId', newTabId);
+    return newTabId;
+  }
+}
 const [currentMember, setCurrentMember] = useState({
 username: nickname,
 avatar: randomColor(),
-id: randomId
+id: generateTabId()
 });
 const [drone, setDrone] = useState(null);
 
-
-  
 useEffect(() => {
   if (!drone) {
     const myDrone = new window.Scaledrone("OKoLR1ZgZTNHMeUZ", { data: currentMember });
@@ -39,7 +39,7 @@ useEffect(() => {
         drone.disconnect();
       }
     };
-  }, [currentMember]);
+  }, []);
   
   useEffect(() => {
     if (drone) {
@@ -48,10 +48,9 @@ useEffect(() => {
       return console.log(error);
     }
     
-
     console.log("openning connection");
     console.log("drone", drone.clientId);
-    let member = { ...currentMember };
+    const member = { ...currentMember };
     member.id = drone.clientId;
     setCurrentMember(member);
     
@@ -75,30 +74,50 @@ useEffect(() => {
         drone.close();
       }
     };
-  }, [currentMember, drone]);
+  }, []);
   }
 }
   );
   
-  
-  
+  const onSendMessage = (message) => {
+    drone.publish({
+      room: 'observable-room',
+      message
+    });
+    const isSentByCurrentUser = currentMember.username === nickname;
+
+    setMessages((prevMessages) => [
+      ...prevMessages,
+      { member: currentMember, text: message, isSentByCurrentUser }
+    ]);
+  };
   
 
-const onSendMessage = message => {
-  drone.publish({
-  room: "observable-room",
-  message
-  });
-  };
-  return (
-    <Router>
-      <Routes>
-      <Route path="/DopApp" element={<DopApp messages={messages} currentMember={currentMember} onSendMessage={onSendMessage} nickname={nickname} />} />
-        <Route path="/" element={<Landing currentMember={currentMember} setCurrentMember={setCurrentMember} nickname={nickname} setNickname={setNickname} />} />
-      </Routes>
-    </Router>
-  )
-}
+    return (
+      <Router>
+        <Routes>
+          <Route
+            path="/DopApp"
+            element={<DopApp messages={messages}
+            currentMember={{
+              username: nickname,
+              avatar: randomColor(),
+              id: Math.floor(Math.random() * 9) + 10
+            }} onSendMessage={onSendMessage} />}
+          />
+          <Route
+            path="/"
+            element={
+              <Landing
+                setNickname={setNickname}
+              />
+            }
+          />
+        </Routes>
+      </Router>
+);
+};
+
+ReactDOM.render(<App />, document.getElementById('root'));
 
 export default App;
-
