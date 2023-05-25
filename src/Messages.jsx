@@ -1,35 +1,31 @@
 import React from "react";
 
-const Messages = (props) => {
-  console.log('mess rendering')
-  const { messages, currentMember } = props;
-  const currentTabId = localStorage.getItem("tabId");
-
-  const renderMessage = (message, k) => {
-    const { member, text, senderTabId } = message;
-    const messageFromMe = member.username === currentMember && senderTabId === currentTabId;
-    const className = messageFromMe
-      ? "Messages-message currentMember"
-      : "Messages-message";
-    return (
-      <li key={k} className={className}>
-        <span
-          className="avatar"
-          style={{ backgroundColor: member.avatar }}
-        />
-        <div className="Message-content">
-          <div className="username">{member.username}</div>
-          <div className="text">{text}</div>
-        </div>
-      </li>
-    );
-  }
-
+const Messages = ({ messages, currentMember }) => {
   return (
     <ul className="Messages-list">
-      {messages.map((message, k) => renderMessage(message, k))}
+      {messages.map((message, index) => {
+        const isSent = message.senderId === currentMember.id;
+
+        return (
+          <li
+            key={index}
+            className={`Messages-message ${
+              isSent ? "Messages-message-sent" : "Messages-message-received"
+            }`}
+          >
+            <div className={`message-content ${isSent ? "sent" : "received"}`}>
+              {!isSent && (
+                <span className="message-username">
+                  {message.senderName}
+                </span>
+              )}
+              <p className="text">{message.text}</p>
+            </div>
+          </li>
+        );
+      })}
     </ul>
   );
-}
+};
 
 export default Messages;

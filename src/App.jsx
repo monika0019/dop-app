@@ -1,35 +1,42 @@
-import React, {useContext, useRef, useState, useEffect } from 'react';
-import { BrowserRouter as Router,
-  Route,
-  Routes ,Link, useNavigate, useLocation } from "react-router-dom";
-  import ReactDOM from 'react-dom';
+import React, { useContext, useRef, useState, useEffect } from 'react';
+import { BrowserRouter as Router, Route, Routes, Link, useNavigate, useLocation } from "react-router-dom";
+import ReactDOM from 'react-dom';
 import "./App.css";
 import Landing from './Landing';
 import { randomColor, DopApp } from './DopApp';
 
-
 const App = () => {
-  console.log('App rendering')
+  console.log('App rendering');
   const [messages, setMessages] = useState([]);
-const [nickname, setNickname] = useState("");
-function generateTabId() {
-  const tabId = localStorage.getItem('tabId');
-  if (tabId) {
-    return tabId;
-  } else {
-    const newTabId = Math.random().toString(36).substr(2, 9);
-    localStorage.setItem('tabId', newTabId);
-    return newTabId;
-  }
-}
-const [currentMember, setCurrentMember] = useState({
-username: nickname,
-avatar: randomColor(),
-id: generateTabId()
-});
-const [drone, setDrone] = useState(null);
+  const [CurrentMember, setCurrentMember] = useState()
+  const [nickname, setNickname] = useState("");
+  const [tabId, setTabId] = useState("");
+  const [drone, setDrone] = useState(null);
+  const currentMember = {
+    username: nickname,
+    avatar: randomColor(),
+    id: tabId
+  };
 
-useEffect(() => {
+  useEffect(() => {
+    const savedMessages = localStorage.getItem('messages');
+    if (savedMessages) {
+      setMessages(JSON.parse(savedMessages));
+    }
+  }, []);
+
+  useEffect(() => {
+    const generatedTabId = localStorage.getItem('tabId');
+    if (generatedTabId) {
+      setTabId(generatedTabId);
+    } else {
+      const newTabId = Math.random().toString(36).substr(2, 9);
+      localStorage.setItem('tabId', newTabId);
+      setTabId(newTabId);
+    }
+  }, []);
+
+  useEffect(() => {
   if (!drone) {
     const myDrone = new window.Scaledrone("OKoLR1ZgZTNHMeUZ", { data: currentMember });
     setDrone(myDrone)
@@ -78,46 +85,52 @@ useEffect(() => {
   }
 }
   );
-  
-  const onSendMessage = (message) => {
-    drone.publish({
-      room: 'observable-room',
-      message
-    });
-    const isSentByCurrentUser = currentMember.username === nickname;
 
-    setMessages((prevMessages) => [
-      ...prevMessages,
-      { member: currentMember, text: message, isSentByCurrentUser }
-    ]);
+  useEffect(() => {
+    localStorage.setItem('messages', JSON.stringify(messages));
+  }, [messages]);
+
+  const handleNicknameSubmit = (submittedNickname) => {
+    localStorage.setItem('nickname', submittedNickname);
+    setNickname(submittedNickname);
   };
-  
 
-    return (
-      <Router>
-        <Routes>
-          <Route
-            path="/DopApp"
-            element={<DopApp messages={messages}
-            currentMember={{
-              username: nickname,
-              avatar: randomColor(),
-              id: Math.floor(Math.random() * 9) + 10
-            }} onSendMessage={onSendMessage} />}
-          />
-          <Route
-            path="/"
-            element={
-              <Landing
-                setNickname={setNickname}
-              />
-            }
-          />
-        </Routes>
-      </Router>
-);
+  const handleSendMessage = (message) => {
+    if (drone && currentMember) {
+      drone.publish({
+        room: "observable-room", // Replace with your Scaledrone room name
+        message,
+      });
+      const newMessage = {
+        member: currentMember,
+        text: message,
+        id: Math.random().toString(36).substr(2, 9),
+        senderTabId: localStorage.getItem('tabId'),
+      };
+      setMessages((prevMessages) => [...prevMessages, newMessage]);
+    }
+  };
+
+  return (
+    <Router>
+      <Routes>
+        <Route
+          path="/DopApp"
+          element={
+            <DopApp
+              messages={messages}
+              currentMember={currentMember}
+              onSendMessage={handleSendMessage}
+            />
+          }
+        />
+        <Route
+          path="/"
+          element={<Landing onNicknameSubmit={handleNicknameSubmit} />}
+        />
+      </Routes>
+    </Router>
+  );
 };
-
-ReactDOM.render(<App />, document.getElementById('root'));
 
 export default App;

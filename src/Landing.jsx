@@ -1,5 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { Link, useNavigate } from "react-router-dom";
+import { v4 as uuidv4 } from "uuid";
 import './App.css';
 import girl from './images/girl.png';
 import man from './images/man.png';
@@ -8,7 +9,7 @@ import Input from './Input';
 import DopApp from "./DopApp";
 
 const Landing = (props) => {
-  const [avatar, setAvatar] = useState("👧");
+ 
   const [error, setError] = useState("");
   const nameRef = useRef();
   const navigate = useNavigate();
@@ -17,15 +18,14 @@ const Landing = (props) => {
     event.preventDefault();
     const nickname = nameRef.current.value.trim();
     if (nickname) {
-      navigate("/DopApp", { state: { nickname, avatar } });
+      const tabId = uuidv4(); // Generate a unique ID for the tab
+      navigate("/DopApp", { state: { nickname, tabId: tabId } });
     } else {
       setError("Please enter a valid username");
     }
   };
   
-  const handleAvatarChange = (selectedAvatar) => {
-    setAvatar(selectedAvatar);
-  };
+  
 
   return (
     <div className="App">
@@ -39,21 +39,7 @@ const Landing = (props) => {
             ref={nameRef}
             placeholder="Enter your username"
           />
-          <div>
-            <span>Choose your avatar:</span>
-            <button
-              className={`avatar-btn ${avatar === "👧" ? "selected" : ""}`}
-              onClick={() => handleAvatarChange("👧")}
-            >
-              👧
-            </button>
-            <button
-              className={`avatar-btn ${avatar === "👨" ? "selected" : ""}`}
-              onClick={() => handleAvatarChange("👨")}
-            >
-              👨
-            </button>
-          </div>
+          
           <button type="submit">Pridruži se</button>
         </form>
         {error && <div className="error">{error}</div>}

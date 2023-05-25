@@ -61,6 +61,7 @@
   display: flex;
   margin-top: 10px;
   align-items: center;
+  text-align: right;
 }
 
 .Messages-message-received {
@@ -78,21 +79,18 @@
   text-align: right;
 }
 
-.Message-content .text {
+.Message-content-me {
   display: inline-block;
-}
-
-.Message-content {
-  display: inline-block;
-}
-
-.currentMember > .Message-content {
   align-items: flex-end;
 }
 
-.Message-content .username {
+.currentMember > .Message-content-me {
+  align-items: flex-end;
+}
+
+.currentMember .nickname {
   display: block;
-  color: turquoise;
+  color: black;
   font-size: 14px;
   padding-bottom: 4px;
 }
@@ -107,8 +105,13 @@
   display: inline-block;
 }
 
-.currentMember .Message-content .text {
+.currentMember .text {
   background-color: mediumaquamarine;
+  padding: 10px;
+  max-width: 400px;
+  margin: 0;
+  border-radius: 12px;
+  display: inline-block;
 }
 
 .Messages-message .avatar {
@@ -151,4 +154,41 @@ button {
   border: none;
   border-radius: 8px;
   margin-left: 10px;
+}
+
+/* Additional styles for sent and received messages */
+.message {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.sent {
+  justify-content: flex-end;
+}
+
+.received {
+  justify-content: flex-start;
+}
+
+.message-content {
+  padding: 10px;
+  max-width: 400px;
+  margin: 0;
+  border-radius: 12px;
+  display: inline-block;
+  color: white;
+}
+
+.sent .message-content {
+  background-color: midnightblue;
+}
+
+.received .message-content {
+  background-color: mediumaquamarine;
+}
+
+.message-username {
+  color: black;
+  font-size: 14px;
+  padding-bottom: 4px;
 }
