@@ -4,7 +4,7 @@ const Messages = ({ messages, currentMember }) => {
   return (
     <ul className="Messages-list">
       {messages.map((message, index) => {
-        const isSent = message.senderId === currentMember.id;
+        const isSent = message.member.id === currentMember.id;
 
         return (
           <li
@@ -13,10 +13,10 @@ const Messages = ({ messages, currentMember }) => {
               isSent ? "Messages-message-sent" : "Messages-message-received"
             }`}
           >
-            <div className={`message-content ${isSent ? "sent" : "received"}`}>
+            <div className={`message-content ${isSent ? "sent" : "received-message"}`}>
               {!isSent && (
                 <span className="message-username">
-                  {message.senderName}
+                  {message.senderName} 
                 </span>
               )}
               <p className="text">{message.text}</p>

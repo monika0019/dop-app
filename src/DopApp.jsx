@@ -7,10 +7,7 @@ export function randomColor() {
   return "#" + Math.floor(Math.random() * 0xffffff).toString(16);
 }
 
-const DopApp = (props) => {
-  console.log("Passing nickname from APP to DoApp " + props.currentMember.username);
-  console.log("DopApp rendering");
-  const { messages, onSendMessage, currentMember } = props;
+const DopApp = ({ messages, currentMember, onSendMessage }) => {
   const location = useLocation();
   const { nickname } = location.state || {};
 
@@ -23,15 +20,19 @@ const DopApp = (props) => {
       <div className="message-container">
         {messages.map((message) => {
           const isSent = message.member.id === currentMember.id;
+          const isReceived = !isSent;
+
           return (
             <div
-              key={message.id}
-              className={`message ${isSent ? 'sent' : 'received'}`}
+              key={message.id} // Assign unique "key" prop to each message
+              className={`message ${isSent ? "sent" : "received"}`}
             >
               <div className="message-content">
-                <span className="message-username">
-                  {isSent ? 'You' : message.member.username}
-                </span>
+                {isReceived && (
+                  <span className="message-username">
+                    {message.member.username}
+                  </span>
+                )}
                 <p className="message-text">{message.text}</p>
               </div>
             </div>
@@ -43,4 +44,4 @@ const DopApp = (props) => {
   );
 };
 
-export { DopApp };
+export {DopApp};
