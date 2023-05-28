@@ -1,6 +1,7 @@
-import React from "react";
+import React from 'react';
+import './App.css'; 
 
-const Messages = ({ messages, currentMember, avatarColor  }) => {
+const Messages = ({ messages, currentMember, nickname }) => {
   return (
     <ul className="Messages-list">
       {messages.map((message, index) => {
@@ -9,17 +10,28 @@ const Messages = ({ messages, currentMember, avatarColor  }) => {
         return (
           <li
             key={index}
-            className={`Messages-message ${
-              isSent ? "Messages-message-sent" : "Messages-message-received"
-            }`}
+            className={`Messages-message ${isSent ? 'Messages-message-sent' : 'Messages-message-received'}`}
           >
-            <div className={`message-content ${isSent ? "sent" : "received-message"}`}>
+            <div className="message-content">
               {!isSent && (
-                <div className="avatar" style={{ backgroundColor: avatarColor }}>
-                  {message.member.username.charAt(0)}
+                <div className="avatar" style={{ backgroundColor: currentMember.color }}>
+                  {currentMember.nickname.charAt(0)}
                 </div>
               )}
-              <div className="message-text">{message.text}</div>
+              <div className="message-text">
+                {!isSent && (
+                  <span className="message-nickname">
+                  {message.member.nickname}
+                </span>
+                
+                )}
+                {message.text}
+              </div>
+              {isSent && (
+                <div className="avatar" style={{ backgroundColor: currentMember.color }}>
+                  {currentMember.nickname.charAt(0)}
+                </div>
+              )}
             </div>
           </li>
         );

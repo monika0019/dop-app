@@ -1,28 +1,34 @@
-import React, { useRef, useState } from 'react';
-import { Link, useNavigate } from "react-router-dom";
-import { v4 as uuidv4 } from "uuid";
+import React, { useRef, useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { v4 as uuidv4 } from 'uuid';
 import './App.css';
 import logo from './images/logo.png';
 
-const Landing = (props) => {
- 
-  const [error, setError] = useState("");
+const Landing = () => {
+  const [error, setError] = useState('');
   const nameRef = useRef();
   const navigate = useNavigate();
-  const [nickname, setNickname] = useState('');
-    
+
+  useEffect(() => {
+    const savedNickname = localStorage.getItem('nickname');
+    if (savedNickname) {
+      nameRef.current.value = savedNickname;
+    }
+  }, []);
+
   const handleSubmit = (event) => {
-    setNickname(event.target.value);
+    event.preventDefault();
     const nickname = nameRef.current.value.trim();
     if (nickname) {
-      const tabId = uuidv4(); // Generate a unique ID for the tab
-      navigate("/DopApp", { state: { nickname, tabId: tabId, currentMember: { username: nickname } } });
+      localStorage.setItem('nickname', nickname); // Save the nickname to localStorage
+      const tabId = uuidv4();
+      navigate('/DopApp', {
+        state: { nickname, tabId, currentMember: { username: nickname } },
+      });
     } else {
-      setError("Please enter a valid username");
+      setError('Please enter a valid username');
     }
   };
-  
-  
 
   return (
     <div className="App">
@@ -31,19 +37,13 @@ const Landing = (props) => {
       </h1>
       <div className="Name-form">
         <form onSubmit={handleSubmit}>
-          <input
-            type="text"
-            value={nickname}
-            ref={nameRef}
-            placeholder="Enter your username"
-          />
-          
-          <Link to={{ pathname: '/DopApp', state: { nickname } }}><button type="submit">Pridruži se</button></Link>
+          <input type="text" ref={nameRef} placeholder="Enter your username" />
+          <button type="submit">Pridruži se</button>
         </form>
         {error && <div className="error">{error}</div>}
       </div>
     </div>
   );
-}
+};
 
 export default Landing;

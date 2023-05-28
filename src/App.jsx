@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Landing from './Landing';
-import { randomColor, DopApp } from './DopApp';
+import {DopApp, randomColor} from './DopApp';
+import './App.css';
 
 const App = () => {
   const [messages, setMessages] = useState([]);
@@ -16,16 +17,8 @@ const App = () => {
   }, []);
 
   useEffect(() => {
-    const generatedTabId = localStorage.getItem('tabId');
-    if (!generatedTabId) {
-      const newTabId = Math.random().toString(36).substr(2, 9);
-      localStorage.setItem('tabId', newTabId);
-    }
-  }, []);
-
-  useEffect(() => {
     if (!drone) {
-      const myDrone = new window.Scaledrone("OKoLR1ZgZTNHMeUZ", { data: currentMember });
+      const myDrone = new window.Scaledrone('OKoLR1ZgZTNHMeUZ', { data: currentMember });
       setDrone(myDrone);
     }
 
@@ -55,7 +48,7 @@ const App = () => {
             console.log(member);
             const newMessage = { member, text: data };
             if (member.id !== drone.clientId) {
-              setMessages(prevMessages => [...prevMessages, newMessage]);
+              setMessages((prevMessages) => [...prevMessages, newMessage]);
             }
           });
         }
@@ -85,9 +78,8 @@ const App = () => {
         member: currentMember,
         text: message,
         id: Math.random().toString(36).substr(2, 9),
-        senderTabId: localStorage.getItem('tabId'),
       };
-      setMessages(prevMessages => [...prevMessages, newMessage]);
+      setMessages((prevMessages) => [...prevMessages, newMessage]);
     }
   };
 
@@ -95,10 +87,19 @@ const App = () => {
     <Router>
       <Routes>
         <Route
-          path="/DopApp"
-          element={<DopApp messages={messages} currentMember={currentMember} onSendMessage={handleSendMessage} />}
+          path="/"
+          element={<Landing onJoin={setCurrentMember} />}
         />
-        <Route path="/" element={<Landing />} />
+        <Route
+          path="/DopApp"
+          element={
+            <DopApp
+              messages={messages}
+              currentMember={currentMember}
+              onSendMessage={handleSendMessage}
+            />
+          }
+        />
       </Routes>
     </Router>
   );

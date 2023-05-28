@@ -65,53 +65,15 @@
 }
 
 .Messages-message-received {
-  flex-direction: row;
+  flex-direction: column;
+  align-items: flex-start;
   text-align: left;
 }
 
 .Messages-message-sent {
-  flex-direction: row-reverse;
-  text-align: right;
-}
-
-.Messages-message .currentMember {
-  flex-direction: row-reverse;
-  text-align: right;
-}
-
-.Message-content-me {
-  display: inline-block;
+  flex-direction: column;
   align-items: flex-end;
-}
-
-.currentMember > .Message-content-me {
-  align-items: flex-end;
-}
-
-.currentMember .nickname {
-  display: block;
-  color: black;
-  font-size: 14px;
-  padding-bottom: 4px;
-}
-
-.Message-content .text {
-  padding: 10px;
-  max-width: 400px;
-  margin: 0;
-  border-radius: 12px;
-  background-color: midnightblue;
-  color: white;
-  display: inline-block;
-}
-
-.currentMember .text {
-  background-color: mediumaquamarine;
-  padding: 8px;
-  max-width: 400px;
-  margin: 0;
-  border-radius: 12px;
-  display: inline-block;
+  text-align: right;
 }
 
 .Messages-message .avatar {
@@ -120,6 +82,47 @@
   border-radius: 50%;
   display: inline-block;
   margin: 0 10px -10px;
+}
+
+.Messages-message .message-content {
+  display: flex;
+  align-items: center;
+}
+
+.message-nickname {
+  display: flex;
+  color: black;
+  font-size: 14px;
+  margin-bottom: 4px;
+}
+
+
+.Messages-message .message-text {
+  padding: 10px;
+  max-width: 400px;
+  margin: 0;
+  border-radius: 12px;
+  display: inline-block;
+}
+
+.Messages-message-received .message-content {
+  flex-direction: row;
+  align-items: flex-start;
+}
+
+.Messages-message-received .message-text {
+  background-color: mediumaquamarine;
+  color: white;
+}
+
+.Messages-message-sent .message-content {
+  flex-direction: row-reverse;
+  align-items: flex-end;
+}
+
+.Messages-message-sent .message-text {
+  background-color: mediumblue;
+  color: white;
 }
 
 form {
@@ -180,15 +183,9 @@ button {
 }
 
 .sent .message-content {
-  background-color: midnightblue;
+  background-color: lightskyblue;
 }
 
 .received .message-content {
-  background-color: mediumaquamarine;
-}
-
-.message-username {
-  color: black;
-  font-size: 14px;
-  padding-bottom: 4px;
+  background-color: lightslategray;
 }
