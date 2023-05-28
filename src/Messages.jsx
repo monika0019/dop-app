@@ -1,6 +1,6 @@
 import React from "react";
 
-const Messages = ({ messages, currentMember }) => {
+const Messages = ({ messages, currentMember, avatarColor  }) => {
   return (
     <ul className="Messages-list">
       {messages.map((message, index) => {
@@ -15,11 +15,11 @@ const Messages = ({ messages, currentMember }) => {
           >
             <div className={`message-content ${isSent ? "sent" : "received-message"}`}>
               {!isSent && (
-                <span className="message-username">
-                  {message.senderName} 
-                </span>
+                <div className="avatar" style={{ backgroundColor: avatarColor }}>
+                  {message.member.username.charAt(0)}
+                </div>
               )}
-              <p className="text">{message.text}</p>
+              <div className="message-text">{message.text}</div>
             </div>
           </li>
         );

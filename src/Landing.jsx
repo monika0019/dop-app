@@ -2,24 +2,21 @@ import React, { useRef, useState } from 'react';
 import { Link, useNavigate } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 import './App.css';
-import girl from './images/girl.png';
-import man from './images/man.png';
 import logo from './images/logo.png';
-import Input from './Input';
-import DopApp from "./DopApp";
 
 const Landing = (props) => {
  
   const [error, setError] = useState("");
   const nameRef = useRef();
   const navigate = useNavigate();
-
+  const [nickname, setNickname] = useState('');
+    
   const handleSubmit = (event) => {
-    event.preventDefault();
+    setNickname(event.target.value);
     const nickname = nameRef.current.value.trim();
     if (nickname) {
       const tabId = uuidv4(); // Generate a unique ID for the tab
-      navigate("/DopApp", { state: { nickname, tabId: tabId } });
+      navigate("/DopApp", { state: { nickname, tabId: tabId, currentMember: { username: nickname } } });
     } else {
       setError("Please enter a valid username");
     }
@@ -36,11 +33,12 @@ const Landing = (props) => {
         <form onSubmit={handleSubmit}>
           <input
             type="text"
+            value={nickname}
             ref={nameRef}
             placeholder="Enter your username"
           />
           
-          <button type="submit">Pridruži se</button>
+          <Link to={{ pathname: '/DopApp', state: { nickname } }}><button type="submit">Pridruži se</button></Link>
         </form>
         {error && <div className="error">{error}</div>}
       </div>

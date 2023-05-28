@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Landing from './Landing';
 import { randomColor, DopApp } from './DopApp';
 
 const App = () => {
-  console.log('App rendering');
   const [messages, setMessages] = useState([]);
   const [currentMember, setCurrentMember] = useState(null);
   const [drone, setDrone] = useState(null);
@@ -54,7 +53,10 @@ const App = () => {
           const room = drone.subscribe('observable-room');
           room.on('data', (data, member) => {
             console.log(member);
-            setMessages((prevMessages) => [...prevMessages, { member, text: data }]);
+            const newMessage = { member, text: data };
+            if (member.id !== drone.clientId) {
+              setMessages(prevMessages => [...prevMessages, newMessage]);
+            }
           });
         }
 
@@ -85,7 +87,7 @@ const App = () => {
         id: Math.random().toString(36).substr(2, 9),
         senderTabId: localStorage.getItem('tabId'),
       };
-      setMessages((prevMessages) => [...prevMessages, newMessage]);
+      setMessages(prevMessages => [...prevMessages, newMessage]);
     }
   };
 

@@ -9,7 +9,7 @@ export function randomColor() {
 
 const DopApp = ({ messages, currentMember, onSendMessage }) => {
   const location = useLocation();
-  const { nickname } = location.state || {};
+  const { nickname, tabId } = location.state || {};
 
   return (
     <div className="App">

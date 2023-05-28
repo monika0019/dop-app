@@ -107,7 +107,7 @@
 
 .currentMember .text {
   background-color: mediumaquamarine;
-  padding: 10px;
+  padding: 8px;
   max-width: 400px;
   margin: 0;
   border-radius: 12px;
@@ -172,7 +172,7 @@ button {
 
 .message-content {
   padding: 10px;
-  max-width: 400px;
+  max-width: 300px;
   margin: 0;
   border-radius: 12px;
   display: inline-block;
