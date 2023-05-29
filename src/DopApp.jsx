@@ -1,9 +1,8 @@
-import {React, useContext, createContext, useEffect, useState} from "react";
-import { useLocation } from "react-router-dom";
-import Messages from "./Messages";
-import Input from "./Input";
+import React, { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
+import Messages from './Messages';
+import Input from './Input';
 import './App.css';
-import App from "./App";
 
 export function randomColor() {
   return '#' + Math.floor(Math.random() * 0xffffff).toString(16);
@@ -11,21 +10,53 @@ export function randomColor() {
 
 const DopApp = ({ messages, currentMember, onSendMessage }) => {
   const location = useLocation();
-  const { nickname, tabId } = location.state || {};
+  const { nickname } = location.state || {};
 
-  const [senderNicknames, setSenderNicknames] = useState({ [tabId]: nickname });
+  const [senderNicknames, setSenderNicknames] = useState({});
+  const [clientId, setClientId] = useState('');
 
-  
-  const getSenderNickname = (message) => {
-    const senderTabId = message.member.tabId;
-    return senderNicknames[senderTabId] || '';
+  useEffect(() => {
+    const channel = new BroadcastChannel('nickname_channel');
+
+    // Generate a new clientId and send the nickname and clientId to other tabs
+    const newClientId = Math.random().toString(36).substr(2, 9);
+    setClientId(newClientId);
+    channel.postMessage({ senderId: currentMember.id, senderNickname: nickname, clientId: newClientId });
+
+    const handleNicknameChange = (event) => {
+      const { senderId, senderNickname, clientId } = event.data;
+    
+      // Update the senderNicknames map with the received senderId and senderNickname
+      setSenderNicknames((prevNicknames) => ({
+        ...prevNicknames,
+        [senderId]: senderNickname,
+      }));
+    
+      // Update the clientId if it's different from the current clientId
+      if (clientId !== newClientId) {
+        setClientId(clientId);
+      }
+    };
+
+    // Listen for nickname updates from other tabs
+    channel.addEventListener('message', handleNicknameChange);
+
+    return () => {
+      channel.removeEventListener('message', handleNicknameChange);
+      channel.close();
+    };
+  }, [currentMember.id, nickname]);
+
+  const getSenderNickname = (senderId) => {
+    return senderNicknames[senderId] || '';
   };
 
-  const getNicknameLabel = (isSent, senderNickname) => {
+  const getNicknameLabel = (isSent, senderId) => {
     if (isSent) {
       return 'You';
     } else {
-      return senderNickname;
+      const senderNickname = getSenderNickname(senderId);
+      return senderNickname || 'Unknown';
     }
   };
 
@@ -38,9 +69,8 @@ const DopApp = ({ messages, currentMember, onSendMessage }) => {
       <div className="message-container">
         {messages.map((message) => {
           const isSent = message.member.id === currentMember.id;
-          const isReceived = !isSent;
-          const senderNickname = getSenderNickname(message);
-          const nicknameLabel = getNicknameLabel(isSent, senderNickname);
+          const senderId = message.member.id;
+          const nicknameLabel = getNicknameLabel(isSent, senderId);
 
           return (
             <div
@@ -48,11 +78,11 @@ const DopApp = ({ messages, currentMember, onSendMessage }) => {
               className={`message ${isSent ? 'sent' : 'received'}`}
             >
               <div className="message-content">
-                {isReceived && (
-                  <div className="message-nickname">{senderNickname}</div>
-                )}
                 {isSent && (
                   <p className="message-nickname">You</p>
+                )}
+                {!isSent && (
+                  <div className="message-nickname">{nicknameLabel}</div>
                 )}
                 <p className="message-text">{message.text}</p>
               </div>
@@ -65,4 +95,4 @@ const DopApp = ({ messages, currentMember, onSendMessage }) => {
   );
 };
 
-export {DopApp};
+export { DopApp };

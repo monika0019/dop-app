@@ -8,6 +8,7 @@ const App = () => {
   const [messages, setMessages] = useState([]);
   const [currentMember, setCurrentMember] = useState(null);
   const [drone, setDrone] = useState(null);
+  const [senderNicknames, setSenderNicknames] = useState({});
 
   useEffect(() => {
     const savedMessages = localStorage.getItem('messages');
@@ -94,9 +95,10 @@ const App = () => {
           path="/DopApp"
           element={
             <DopApp
-              messages={messages}
-              currentMember={currentMember}
-              onSendMessage={handleSendMessage}
+            messages={messages}
+            currentMember={currentMember}
+            onSendMessage={handleSendMessage}
+            senderNicknames={senderNicknames}
             />
           }
         />

@@ -10,7 +10,7 @@ const Landing = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const savedNickname = localStorage.getItem('nickname');
+    const savedNickname = localStorage.getItem('');
     if (savedNickname) {
       nameRef.current.value = savedNickname;
     }
@@ -23,7 +23,7 @@ const Landing = () => {
       localStorage.setItem('nickname', nickname); // Save the nickname to localStorage
       const tabId = uuidv4();
       navigate('/DopApp', {
-        state: { nickname, tabId, currentMember: { username: nickname } },
+        state: { nickname, tabId, currentMember: { nickname } }, // Pass the nickname as currentMember.nickname
       });
     } else {
       setError('Please enter a valid username');
