@@ -1,34 +1,34 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import './App.css';
 
 const Input = (props) => {
-  console.log('input rendering')
-  const [text, setText] = useState("");
+  const [text, setText] = useState('');
 
   const onChange = (e) => {
     setText(e.target.value);
-  }
+  };
 
   const onSubmit = (e) => {
     e.preventDefault();
-    setText("");
+    setText('');
     props.onSendMessage(text);
-  }
+  };
 
   return (
     <div className="Input">
       <form onSubmit={onSubmit}>
-        <input className="Input-mess"
+        <input
+          className="Input-mess"
           onChange={onChange}
           value={text}
           type="text"
-          placeholder="Upiši svoju poruku i pritisni ENTER"
-          autoFocus={true}
+          placeholder={`Upiši svoju poruku i pritisni ENTER`}
+          autoFocus
         />
-        <button>Pošalji</button>
+        <button type="submit">Send</button>
       </form>
     </div>
   );
-}
+};
 
 export default Input;

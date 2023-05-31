@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 import './App.css';
 import logo from './images/logo.png';
@@ -20,10 +20,10 @@ const Landing = () => {
     event.preventDefault();
     const nickname = nameRef.current.value.trim();
     if (nickname) {
-      localStorage.setItem('nickname', nickname); // Save the nickname to localStorage
+      localStorage.setItem('nickname', nickname);
       const tabId = uuidv4();
       navigate('/DopApp', {
-        state: { nickname, tabId, currentMember: { nickname } }, // Pass the nickname as currentMember.nickname
+        state: { nickname, currentMember: { id: tabId, nickname } },
       });
     } else {
       setError('Please enter a valid username');

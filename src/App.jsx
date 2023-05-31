@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Landing from './Landing';
-import {DopApp, randomColor} from './DopApp';
+import DopApp from './DopApp';
 import './App.css';
 
 const App = () => {
   const [messages, setMessages] = useState([]);
   const [currentMember, setCurrentMember] = useState(null);
   const [drone, setDrone] = useState(null);
-  const [senderNicknames, setSenderNicknames] = useState({});
 
   useEffect(() => {
     const savedMessages = localStorage.getItem('messages');
@@ -39,7 +38,7 @@ const App = () => {
 
         console.log('Opening connection');
         console.log('drone', drone.clientId);
-        const member = { ...currentMember, color: randomColor() };
+        const member = { ...currentMember};
         member.id = drone.clientId;
         setCurrentMember(member);
 
@@ -72,7 +71,7 @@ const App = () => {
   const handleSendMessage = (message) => {
     if (drone && currentMember) {
       drone.publish({
-        room: 'observable-room', // Replace with your Scaledrone room name
+        room: 'observable-room',
         message,
       });
       const newMessage = {
@@ -83,6 +82,8 @@ const App = () => {
       setMessages((prevMessages) => [...prevMessages, newMessage]);
     }
   };
+
+  const savedNickname = localStorage.getItem('nickname');
 
   return (
     <Router>
@@ -95,10 +96,10 @@ const App = () => {
           path="/DopApp"
           element={
             <DopApp
-            messages={messages}
-            currentMember={currentMember}
-            onSendMessage={handleSendMessage}
-            senderNicknames={senderNicknames}
+              messages={messages}
+              currentMember={currentMember}
+              onSendMessage={handleSendMessage}
+              nickname={savedNickname}
             />
           }
         />

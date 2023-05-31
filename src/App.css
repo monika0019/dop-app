@@ -30,13 +30,6 @@
   width: 40%;
 }
 
-.Avatar-pic {
-  display: flex;
-  margin: auto auto;
-  justify-content: center;
-  height: 300px;
-  width: 300px;
-}
 
 .App-header {
   background-color: midnightblue;
@@ -76,14 +69,6 @@
   text-align: right;
 }
 
-.Messages-message .avatar {
-  height: 35px;
-  width: 35px;
-  border-radius: 50%;
-  display: inline-block;
-  margin: 0 10px -10px;
-}
-
 .Messages-message .message-content {
   display: flex;
   align-items: center;
@@ -95,7 +80,6 @@
   font-size: 14px;
   margin-bottom: 4px;
 }
-
 
 .Messages-message .message-text {
   padding: 10px;
@@ -159,7 +143,6 @@ button {
   margin-left: 10px;
 }
 
-/* Additional styles for sent and received messages */
 .message {
   display: flex;
   justify-content: flex-start;

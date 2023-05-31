@@ -1,45 +1,49 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
-import Messages from './Messages';
 import Input from './Input';
 import './App.css';
 
-export function randomColor() {
-  return '#' + Math.floor(Math.random() * 0xffffff).toString(16);
-}
-
 const DopApp = ({ messages, currentMember, onSendMessage }) => {
   const location = useLocation();
-  const { nickname } = location.state || {};
+  const nickname = location.state?.nickname;
 
   const [senderNicknames, setSenderNicknames] = useState({});
   const [clientId, setClientId] = useState('');
 
   useEffect(() => {
     const channel = new BroadcastChannel('nickname_channel');
-
-    // Generate a new clientId and send the nickname and clientId to other tabs
     const newClientId = Math.random().toString(36).substr(2, 9);
     setClientId(newClientId);
+
+    const savedSenderNicknames = localStorage.getItem('senderNicknames');
+    if (savedSenderNicknames) {
+      setSenderNicknames(JSON.parse(savedSenderNicknames));
+    } else {
+      setSenderNicknames((prevNicknames) => ({
+        ...prevNicknames,
+        [currentMember.id]: currentMember.nickname,
+      }));
+    }
+
     channel.postMessage({ senderId: currentMember.id, senderNickname: nickname, clientId: newClientId });
 
     const handleNicknameChange = (event) => {
-      const { senderId, senderNickname, clientId } = event.data;
-    
-      // Update the senderNicknames map with the received senderId and senderNickname
+      const { senderId, senderNickname, clientId: newClientId } = event.data;
+
       setSenderNicknames((prevNicknames) => ({
         ...prevNicknames,
         [senderId]: senderNickname,
       }));
-    
-      // Update the clientId if it's different from the current clientId
+
       if (clientId !== newClientId) {
-        setClientId(clientId);
+        setClientId(newClientId);
       }
     };
 
-    // Listen for nickname updates from other tabs
     channel.addEventListener('message', handleNicknameChange);
+
+    localStorage.setItem('senderNicknames', JSON.stringify(senderNicknames));
+    channel.postMessage({ senderNicknames });
 
     return () => {
       channel.removeEventListener('message', handleNicknameChange);
@@ -47,18 +51,24 @@ const DopApp = ({ messages, currentMember, onSendMessage }) => {
     };
   }, [currentMember.id, nickname]);
 
+  useEffect(() => {
+    localStorage.setItem('senderNicknames', JSON.stringify(senderNicknames));
+  }, [senderNicknames]);
+
   const getSenderNickname = (senderId) => {
     return senderNicknames[senderId] || '';
   };
 
-  const getNicknameLabel = (isSent, senderId) => {
-    if (isSent) {
-      return 'You';
-    } else {
-      const senderNickname = getSenderNickname(senderId);
-      return senderNickname || 'Unknown';
-    }
-  };
+  const getNicknameLabel = useMemo(() => {
+    return (senderId) => {
+      if (senderId === currentMember.id) {
+        return 'You';
+      } else {
+        const senderNickname = getSenderNickname(senderId);
+        return senderNickname || 'Unknown';
+      }
+    };
+  }, [senderNicknames, currentMember.id]);
 
   return (
     <div className="App">
@@ -68,22 +78,16 @@ const DopApp = ({ messages, currentMember, onSendMessage }) => {
       </div>
       <div className="message-container">
         {messages.map((message) => {
-          const isSent = message.member.id === currentMember.id;
           const senderId = message.member.id;
-          const nicknameLabel = getNicknameLabel(isSent, senderId);
+          const nicknameLabel = getNicknameLabel(senderId);
 
           return (
             <div
               key={message.id}
-              className={`message ${isSent ? 'sent' : 'received'}`}
+              className={`message ${senderId === currentMember.id ? 'sent' : 'received'}`}
             >
               <div className="message-content">
-                {isSent && (
-                  <p className="message-nickname">You</p>
-                )}
-                {!isSent && (
-                  <div className="message-nickname">{nicknameLabel}</div>
-                )}
+                <div className="message-nickname">{nicknameLabel}</div>
                 <p className="message-text">{message.text}</p>
               </div>
             </div>
@@ -95,4 +99,4 @@ const DopApp = ({ messages, currentMember, onSendMessage }) => {
   );
 };
 
-export { DopApp };
+export default DopApp ;
